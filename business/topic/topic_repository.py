@@ -50,17 +50,6 @@ class TopicRepository(business.Service):
 		"""
 
 		# # # # # #
-		# 人次版本 #
-		# # # # # #
-
-		record_db_models = topic_models.TopicActivity.select(
-				topic_models.TopicActivity,
-				fn.COUNT(topic_models.TopicActivity.id).alias('activity')
-			).group_by(topic_models.TopicActivity.topic_id).order_by(
-				fn.COUNT(topic_models.TopicActivity.id).desc()
-			)
-
-		# # # # # #
 		# 人数版本 #
 		# # # # # #
 
@@ -73,6 +62,16 @@ class TopicRepository(business.Service):
 		# )                                                                             #
 		# # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
 
+		# # # # # #
+		# 人次版本 #
+		# # # # # #
+
+		record_db_models = topic_models.TopicActivity.select(
+				topic_models.TopicActivity,
+				fn.COUNT(topic_models.TopicActivity.id).alias('activity')
+			).group_by(topic_models.TopicActivity.topic_id).order_by(
+				fn.COUNT(topic_models.TopicActivity.id).desc()
+			)
 		topic_ids = [record_db_model.topic_id for record_db_model in record_db_models]
 
 		db_models = topic_models.Topic.select().dj_where(id__in=topic_ids, is_banned=True)
