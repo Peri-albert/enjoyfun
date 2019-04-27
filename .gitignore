@@ -1,0 +1,8 @@
+*.pyc
+.idea/*
+.project
+.*~
+*.DS_Store
+node_modules
+static/upload/
+venv
