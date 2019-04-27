@@ -76,6 +76,8 @@ class DynamicRepository(business.Service):
 			elif dynamic_latitude > max_latitude:
 				max_latitude = dynamic_latitude
 
+			angle += 0.01 * pi
+
 		db_models = dynamic_models.Dynamic.select().dj_where(
 			is_deleted=False,
 			longitude__in=[min_longitude, max_longitude],
