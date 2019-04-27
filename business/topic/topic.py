@@ -2,12 +2,16 @@
 
 from rust.core import business
 
+
 class Topic(business.Model):
 
 	__slots__ = (
 		'id',
 		'name',
+		'avatar',
+		'description',
 		'created_at',
+		'is_banned'
 	)
 
 	def __init__(self, db_model=None):

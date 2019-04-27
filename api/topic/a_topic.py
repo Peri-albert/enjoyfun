@@ -7,50 +7,54 @@ from rust.core.exceptions import BusinessError
 
 from business.topic.topic_repository import TopicRepository
 from business.topic.topic_factory import TopicFactory
+from business.topic.fill_topic_service import FillTopicService
+from business.topic.encode_topic_service import EncodeTopicService
+from business.topic.visit_service import VisitService
 
 
 @Resource('topic.topic')
 class ATopic(ApiResource):
 
-	@param_required(['user', 'id:int'])
+	@param_required(['user', 'id:int', '?with_options:json'])
 	def get(self):
 		user = self.params['user']
 		topic = TopicRepository(user).get_topic_by_id(self.params['id'])
-		if not topic:
-			return 500, u'不存在'
-		else:
-			return {
-				'id': topic.id,
-				'name': topic.name
-			}
 
-	@param_required(['user', 'name'])
+		fill_option = self.params.get('with_options', {'with_activity': False, 'with_dynamic': False})
+		FillTopicService(user).fill([topic], fill_option)
+
+		return EncodeTopicService(user).encode(topic)
+
+	@param_required(['user', 'name', 'avatar', 'description'])
 	def put(self):
+		if not self.params['user'].is_manager:
+			raise BusinessError(u'操作无权限')
 		user = self.params['user']
 		param_object = ParamObject({
-			'name': self.params['name']
+			'name': self.params['name'],
+			'avatar': self.params['avatar'],
+			'description': self.params['description']
 		})
 		topic = TopicFactory(user).create(param_object)
+		visit_history = ParamObject({
+			'topic_id': topic.id,
+			'user_id': user.id
+		})
+		VisitService(user).visit(visit_history)
 		return {
 			'id': topic.id
 		}
 
-	@param_required(['user', 'id:int', 'name'])
+	@param_required(['user', 'id:int', '?name', '?avatar', '?description'])
 	def post(self):
+		if not self.params['user'].is_manager:
+			raise BusinessError(u'操作无权限')
 		user = self.params['user']
 		param_object = ParamObject({
 			'id': self.params['id'],
-			'name': self.params['name']
+			'name': self.params.get('name'),
+			'avatar': self.params.get('avatar'),
+			'description': self.params.get('description')
 		})
 		TopicFactory(user).update(param_object)
 		return {}
-
-	@param_required(['user', 'id:int'])
-	def delete(self):
-		user = self.params['user']
-		param_object = ParamObject({
-			'id': self.params['id']
-		})
-		TopicFactory(user).delete(param_object)
-		return {}
-

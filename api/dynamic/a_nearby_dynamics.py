@@ -26,7 +26,7 @@ class ANearbyDynamics(ApiResource):
 		dynamics = DynamicRepository(user).get_nearby_dynamics(param_object, filters, target_page)
 
 		fill_option = self.params.get('with_options', {'with_resource': False, 'with_approval': False, 'with_comment': False})
-		FillDynamicService.get().fill(dynamics, fill_option)
+		FillDynamicService(user).fill(dynamics, fill_option)
 
 		return {
 			'dynamics': [EncodeDynamicService(user).encode(dynamic) for dynamic in dynamics],
