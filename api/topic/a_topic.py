@@ -14,9 +14,14 @@ from business.topic.visit_service import VisitService
 
 @Resource('topic.topic')
 class ATopic(ApiResource):
-
+	"""
+	话题
+	"""
 	@param_required(['user', 'id:int', '?with_options:json'])
 	def get(self):
+		"""
+		根据id获取话题
+		"""
 		user = self.params['user']
 		topic = TopicRepository(user).get_topic_by_id(self.params['id'])
 
@@ -27,6 +32,9 @@ class ATopic(ApiResource):
 
 	@param_required(['user', 'name', 'avatar', 'description'])
 	def put(self):
+		"""
+		创建话题(限管理员操作)
+		"""
 		if not self.params['user'].is_manager:
 			raise BusinessError(u'操作无权限')
 		user = self.params['user']
@@ -47,6 +55,9 @@ class ATopic(ApiResource):
 
 	@param_required(['user', 'id:int', '?name', '?avatar', '?description'])
 	def post(self):
+		"""
+		修改话题（限管理员操作）
+		"""
 		if not self.params['user'].is_manager:
 			raise BusinessError(u'操作无权限')
 		user = self.params['user']

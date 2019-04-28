@@ -13,9 +13,14 @@ from business.dynamic.encode_dynamic_service import EncodeDynamicService
 
 @Resource('dynamic.dynamic')
 class ADynamic(ApiResource):
-
+	"""
+	动态
+	"""
 	@param_required(['user', 'id:int', '?with_options:json'])
 	def get(self):
+		"""
+		根据动态id获取动态
+		"""
 		user = self.params['user']
 		dynamic = DynamicRepository(user).get_dynamic_by_id(self.params['id'])
 
@@ -26,6 +31,9 @@ class ADynamic(ApiResource):
 
 	@param_required(['user', 'content', 'topic_id', 'longitude', 'latitude', '?resources:json'])
 	def put(self):
+		"""
+		发布动态
+		"""
 		user = self.params['user']
 		param_object = ParamObject({
 			'user_id': user.id,
@@ -45,6 +53,9 @@ class ADynamic(ApiResource):
 
 	@param_required(['user', 'id:int', '?content', '?topic_id', '?longitude', '?latitude', '?resources:json'])
 	def post(self):
+		"""
+		修改动态(限管理员或本人操作)
+		"""
 		user = self.params['user']
 		dynamic = DynamicRepository(user).get_dynamic_by_id(self.params['id'])
 		if not user.is_manager or user.id != dynamic.user_id:
@@ -64,6 +75,9 @@ class ADynamic(ApiResource):
 
 	@param_required(['user', 'id:int'])
 	def delete(self):
+		"""
+		删除动态(限管理员或本人操作)
+		"""
 		user = self.params['user']
 		dynamic = DynamicRepository(user).get_dynamic_by_id(self.params['id'])
 		if not user.is_manager or user.id != dynamic.user_id:
@@ -73,4 +87,3 @@ class ADynamic(ApiResource):
 		})
 		DynamicFactory(user).delete(param_object)
 		return {}
-

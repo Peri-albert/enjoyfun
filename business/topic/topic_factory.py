@@ -8,8 +8,13 @@ from db.topic import models as topic_models
 
 
 class TopicFactory(business.Service):
-
+	"""
+	话题工厂
+	"""
 	def create(self, param_object):
+		"""
+		创建话题
+		"""
 		if topic_models.Topic.select().dj_where(name=param_object.name).first():
 			raise BusinessError('existed')
 
@@ -22,6 +27,9 @@ class TopicFactory(business.Service):
 		return Topic(db_model)
 
 	def update(self, param_object):
+		"""
+		更新话题
+		"""
 		db_model = topic_models.Topic.select().dj_where(id=param_object.id).first()
 		modified = False
 		if param_object.name is not None and db_model.name != param_object.name:

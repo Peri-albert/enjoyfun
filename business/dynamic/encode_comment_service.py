@@ -8,6 +8,9 @@ class EncodeCommentService(business.Service):
 	封装评论Comment数据的服务
 	"""
 	def encode(self, comment):
+		"""
+		封装评论Comment数据
+		"""
 		data = {
 			'id': comment.id,
 			'content': comment.content,

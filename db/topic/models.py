@@ -21,8 +21,8 @@ class TopicActivity(models.Model):
 	"""
 	话题热度
 	"""
-	topic_id = models.IntegerField(default=0, index=True)
-	user_id = models.IntegerField(default=0, index=True)
+	topic_id = models.IntegerField(default=0, index=True)  # 话题id
+	user_id = models.IntegerField(default=0, index=True)  # 用户id
 
 	class Meta(object):
 		table_name = 'topic_activity'

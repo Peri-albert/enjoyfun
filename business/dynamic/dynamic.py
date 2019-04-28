@@ -4,8 +4,11 @@ from rust.core import business
 
 from db.dynamic import models as dynamic_models
 
-class Dynamic(business.Model):
 
+class Dynamic(business.Model):
+	"""
+	动态
+	"""
 	__slots__ = (
 		'id',
 		'content',

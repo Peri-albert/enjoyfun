@@ -33,7 +33,7 @@ class CommentService(business.Service):
 
 	def get_comment_by_id(self, comment_id):
 		"""
-		根据id获取Comment对象
+		根据id获取评论
 		"""
 		db_model = dynamic_models.DynamicComment.select().dj_where(id=comment_id).first()
 		if db_model:

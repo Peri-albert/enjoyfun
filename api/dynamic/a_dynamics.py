@@ -11,9 +11,14 @@ from business.dynamic.encode_dynamic_service import EncodeDynamicService
 
 @Resource('dynamic.dynamics')
 class ADynamics(ApiResource):
-
+	"""
+	动态列表
+	"""
 	@param_required(['user', '?with_options:json', '?page:int', '?count_per_page:int', '?filters:json'])
 	def get(self):
+		"""
+		获取动态列表
+		"""
 		user = self.params['user']
 		target_page = TargetPage(self.params)
 		filters = self.params.get('filters')

@@ -8,6 +8,9 @@ class EncodeDynamicService(business.Service):
 	封装动态Dynamic数据的服务
 	"""
 	def encode(self, dynamic):
+		"""
+		封装动态Dynamic数据
+		"""
 		data = {
 			'id': dynamic.id,
 			'content': dynamic.content,

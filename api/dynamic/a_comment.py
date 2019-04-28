@@ -10,9 +10,14 @@ from business.dynamic.comment_service import CommentService
 
 @Resource('dynamic.comment')
 class AComment(ApiResource):
-
+	"""
+	评论
+	"""
 	@param_required(['user', 'dynamic_id', 'content'])
 	def put(self):
+		"""
+		提交评论
+		"""
 		user = self.params['user']
 		param_object = ParamObject({
 			'user_id': user.id,
@@ -27,6 +32,9 @@ class AComment(ApiResource):
 
 	@param_required(['user', 'id'])
 	def delete(self):
+		"""
+		删除评论
+		"""
 		user = self.params['user']
 		comment = CommentService(user).get_comment_by_id(self.params['id'])
 		if not user.is_manager or comment.user_id != user.id:

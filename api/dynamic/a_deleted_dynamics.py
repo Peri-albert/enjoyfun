@@ -12,9 +12,14 @@ from business.dynamic.encode_dynamic_service import EncodeDynamicService
 
 @Resource('dynamic.deleted_dynamics')
 class ADeletedDynamics(ApiResource):
-
+	"""
+	删除的动态列表(限管理员操作)
+	"""
 	@param_required(['user', '?with_options:json', '?page:int', '?count_per_page:int', '?filters:json'])
 	def get(self):
+		"""
+		获取已删除的动态列表(限管理员操作)
+		"""
 		if not self.params['user'].is_manager:
 			raise BusinessError(u'操作无权限')
 		user = self.params['user']

@@ -11,9 +11,14 @@ from business.dynamic.encode_comment_service import EncodeCommentService
 
 @Resource('dynamic.comments')
 class AComments(ApiResource):
-
+	"""
+	评论列表
+	"""
 	@param_required(['user', 'dynamic_id', '?page:int', '?count_per_page:int', '?filters:json'])
 	def get(self):
+		"""
+		获取评论列表
+		"""
 		user = self.params['user']
 		target_page = TargetPage(self.params)
 		filters = self.params.get('filters')

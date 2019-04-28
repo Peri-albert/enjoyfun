@@ -10,9 +10,14 @@ from business.dynamic.like_service import LikeService
 
 @Resource('dynamic.approval')
 class AApproval(ApiResource):
-
+	"""
+	点赞
+	"""
 	@param_required(['user', 'dynamic_id'])
 	def put(self):
+		"""
+		点赞
+		"""
 		user = self.params['user']
 		param_object = ParamObject({
 			'user_id': user.id,
@@ -26,6 +31,9 @@ class AApproval(ApiResource):
 
 	@param_required(['user', 'id'])
 	def delete(self):
+		"""
+		点赞取消
+		"""
 		user = self.params['user']
 		approval = LikeService(user).get_approval_by_id(self.params['id'])
 		if approval.user_id != user.id:
@@ -36,4 +44,3 @@ class AApproval(ApiResource):
 		LikeService(user).dislike(param_object)
 
 		return {}
-

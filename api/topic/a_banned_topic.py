@@ -13,7 +13,6 @@ class ABannedTopic(ApiResource):
 	"""
 	禁用的话题
 	"""
-
 	@param_required(['user', 'topic_id'])
 	def put(self):
 		"""

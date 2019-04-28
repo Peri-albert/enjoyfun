@@ -4,7 +4,9 @@ from rust.core import business
 
 
 class Activity(business.Model):
-
+	"""
+	活跃度
+	"""
 	__slots__ = (
 		'id'
 	)

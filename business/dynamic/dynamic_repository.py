@@ -9,6 +9,7 @@ from db.dynamic import models as dynamic_models
 
 EARTH_RADIUS = 6371393
 
+
 class DynamicRepository(business.Service):
 	"""
 	获取Account对象的repository

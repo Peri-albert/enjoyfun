@@ -55,4 +55,3 @@ class DynamicFactory(business.Service):
 		dynamic_models.Dynamic.update(
 			is_deleted=True
 		).dj_where(id=param_object.id).execute()
-

@@ -12,9 +12,14 @@ from business.dynamic.encode_dynamic_service import EncodeDynamicService
 
 @Resource('dynamic.nearby_dynamics')
 class ANearbyDynamics(ApiResource):
-
+	"""
+	附近的动态列表
+	"""
 	@param_required(['user', 'longitude', 'latitude', '?with_options:json', '?page:int', '?count_per_page:int', '?filters:json'])
 	def get(self):
+		"""
+		根据用户经纬度获取附近的动态列表
+		"""
 		user = self.params['user']
 		param_object = ParamObject({
 			'account_longitude': self.params['longitude'],

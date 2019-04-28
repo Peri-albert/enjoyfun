@@ -4,7 +4,9 @@ from rust.core import business
 
 
 class Topic(business.Model):
-
+	"""
+	话题
+	"""
 	__slots__ = (
 		'id',
 		'name',

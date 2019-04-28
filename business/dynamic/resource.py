@@ -5,7 +5,9 @@ from db.dynamic import models as dynamic_models
 
 
 class Resource(business.Model):
-
+	"""
+	资源
+	"""
 	__slots__ = (
 		'id',
 		'url',

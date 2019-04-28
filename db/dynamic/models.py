@@ -24,7 +24,7 @@ class Dynamic(models.Model):
 	topic_id = models.IntegerField(default=0)  # 话题的id
 	longitude = models.FloatField(default=0)  # 发布地点的经度
 	latitude = models.FloatField(default=0)  # 发布地点的纬度
-	created_at = models.DateTimeField(auto_now_add=True) # 创建时间
+	created_at = models.DateTimeField(auto_now_add=True)  # 创建时间
 	is_deleted = models.BooleanField(default=False)  # 是否删除
 
 	class Meta(object):
@@ -62,7 +62,7 @@ class DynamicComment(models.Model):
 	dynamic_id = models.IntegerField(default=0, index=True)  # 动态id
 	user_id = models.IntegerField(default=0, index=True)  # 评论者的user_id
 	content = models.TextField(default='')  # 评论内容
-	created_at = models.DateTimeField(auto_now_add=True) # 创建时间
+	created_at = models.DateTimeField(auto_now_add=True)  # 创建时间
 
 	class Meta(object):
 		table_name = 'dynamic_comment'

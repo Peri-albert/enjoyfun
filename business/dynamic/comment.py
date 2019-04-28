@@ -4,7 +4,9 @@ from rust.core import business
 
 
 class Comment(business.Model):
-
+	"""
+	评论
+	"""
 	__slots__ = (
 		'id',
 		'content',

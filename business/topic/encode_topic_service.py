@@ -8,6 +8,9 @@ class EncodeTopicService(business.Service):
 	封装话题Topic数据的服务
 	"""
 	def encode(self, topic):
+		"""
+		封装话题Topic数据
+		"""
 		data = {
 			'id': topic.id,
 			'name': topic.name,

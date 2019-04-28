@@ -4,7 +4,9 @@ from rust.core import business
 
 
 class Approval(business.Model):
-
+	"""
+	点赞
+	"""
 	__slots__ = (
 		'id'
 	)

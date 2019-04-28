@@ -10,8 +10,13 @@ from db.topic import models as topic_models
 
 
 class TopicRepository(business.Service):
-
+	"""
+	获取Topic对象的Repository
+	"""
 	def get_topic_by_id(self, topic_id):
+		"""
+		根据话题id获取话题
+		"""
 		db_model = topic_models.Topic.select().dj_where(id=topic_id).first()
 		if db_model:
 			return Topic(db_model)

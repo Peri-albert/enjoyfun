@@ -8,8 +8,15 @@ from .resource import Resource
 from .comment import Comment
 from .approval import Approval
 
+
 class FillDynamicService(business.Service):
+	"""
+	填充动态服务
+	"""
 	def __fill_resource_data(self, dynamics):
+		"""
+		填充资源数据
+		"""
 		id2dynamic = {dynamic.id: dynamic for dynamic in dynamics}
 
 		dynamic_ids = [dynamic.id for dynamic in dynamics]
@@ -21,6 +28,9 @@ class FillDynamicService(business.Service):
 			id2dynamic.setdefault(db_model.dynamic_id, []).resources.append(Resource(db_model))
 
 	def __fill_comment_data(self, dynamics):
+		"""
+		填充评论数据
+		"""
 		id2dynamic = {dynamic.id: dynamic for dynamic in dynamics}
 
 		dynamic_ids = [dynamic.id for dynamic in dynamics]
@@ -35,6 +45,9 @@ class FillDynamicService(business.Service):
 			dynamic.comment_amount = len(dynamic.comments)
 
 	def __fill_approval_data(self, dynamics):
+		"""
+		填充点赞数据
+		"""
 		id2dynamic = {dynamic.id: dynamic for dynamic in dynamics}
 
 		dynamic_ids = [dynamic.id for dynamic in dynamics]
@@ -48,8 +61,10 @@ class FillDynamicService(business.Service):
 		for dynamic in dynamics:
 			dynamic.approval_amount = len(dynamic.approvals)
 
-
 	def fill(self, dynamics, options=None):
+		"""
+		填充选项
+		"""
 		options = options or {}
 		if options.get('with_resource', False):
 			self.__fill_resource_data(dynamics)
