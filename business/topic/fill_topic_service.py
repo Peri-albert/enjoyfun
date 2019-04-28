@@ -28,7 +28,7 @@ class FillTopicService(business.Service):
 		id2topic = {topic.id: topic for topic in topics}
 
 		topic_ids = [topic.id for topic in topics]
-		db_models = dynamic_models.Dynamic.select().dj_where(topic_id__in=topic_ids).order_by('-id')
+		db_models = dynamic_models.Dynamic.select().dj_where(topic_id__in=topic_ids, is_deleted=False).order_by('-id')
 		for topic in topics:
 			topic.dynamics = []
 
