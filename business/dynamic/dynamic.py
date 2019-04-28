@@ -37,6 +37,6 @@ class Dynamic(business.Model):
 				'dynamic_id': self.id,
 				'url': resource['url'],
 				'size': resource['size'],
-				'type': dynamic_models.DYNAMIC_RESOURCE_TYPE[resource['name']]
+				'type': dynamic_models.DYNAMIC_RESOURCE_TYPE[resource['type'.upper()]]
 			})
 		dynamic_models.DynamicResource.insert_many(rows).dj_where(dynamic_id=self.id).execute()
