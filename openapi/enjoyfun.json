@@ -1,0 +1,1665 @@
+{
+  "openapi" : "3.0.0",
+  "servers" : [ {
+    "description" : "享趣社区的内容微服务URI",
+    "url" : "{protocol}://www.mindinn.top/enjoyfun",
+    "variables" : {
+      "protocol" : {
+        "enum" : [ "http", "https" ],
+        "default" : "https"
+      }
+    }
+  } ],
+  "info" : {
+    "description" : "享趣社区的内容微服务",
+    "version" : "1.0.0",
+    "title" : "Mindinn Enjoyfun Microservice",
+    "contact" : {
+      "email" : "albertgandolf@gmail.com"
+    },
+    "license" : {
+      "name" : "Apache 2.0",
+      "url" : "http://www.apache.org/licenses/LICENSE-2.0.html"
+    }
+  },
+  "tags" : [ {
+    "name" : "管理员",
+    "description" : "限管理员权限操作"
+  }, {
+    "name" : "用户",
+    "description" : "常规操作"
+  } ],
+  "paths" : {
+    "/dynamic/dynamic" : {
+      "get" : {
+        "security" : [ {
+          "bearerAuth" : [ ]
+        } ],
+        "tags" : [ "用户" ],
+        "summary" : "返回封装好的动态对象",
+        "description" : "根据动态id获取动态\n",
+        "parameters" : [ {
+          "in" : "query",
+          "name" : "id",
+          "description" : "动态id",
+          "required" : true,
+          "schema" : {
+            "type" : "integer"
+          }
+        }, {
+          "in" : "query",
+          "name" : "with_options",
+          "description" : "填充参数",
+          "required" : false,
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "type" : "object",
+                "properties" : {
+                  "with_resource" : {
+                    "type" : "boolean"
+                  },
+                  "with_approval" : {
+                    "type" : "boolean"
+                  },
+                  "with_commit" : {
+                    "type" : "boolean"
+                  }
+                },
+                "default" : {
+                  "with_options" : {
+                    "with_resource" : false,
+                    "with_approval" : false,
+                    "with_comment" : false
+                  }
+                }
+              }
+            }
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "search results matching criteria",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Dynamic"
+                }
+              }
+            }
+          },
+          "default" : {
+            "description" : "意外的错误",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        }
+      },
+      "put" : {
+        "security" : [ {
+          "bearerAuth" : [ ]
+        } ],
+        "tags" : [ "用户" ],
+        "summary" : "用户发布动态",
+        "description" : "用户登录系统后发布动态\n",
+        "responses" : {
+          "200" : {
+            "description" : "加入成功",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "type" : "object",
+                  "properties" : {
+                    "id" : {
+                      "type" : "integer",
+                      "description" : "动态的id"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "default" : {
+            "description" : "意外的错误",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        },
+        "requestBody" : {
+          "content" : {
+            "application/x-www-form-urlencoded" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/CreatedDynamic"
+              }
+            }
+          },
+          "description" : "用户发布动态的请求体"
+        }
+      },
+      "post" : {
+        "security" : [ {
+          "bearerAuth" : [ ]
+        } ],
+        "tags" : [ "用户", "管理员" ],
+        "summary" : "修改更新动态",
+        "description" : "用户本人或管理员登录系统后修改更新动态\n",
+        "responses" : {
+          "200" : {
+            "description" : "更新成功"
+          },
+          "default" : {
+            "description" : "意外的错误",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        },
+        "requestBody" : {
+          "content" : {
+            "application/x-www-form-urlencoded" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/UpdatedDynamic"
+              }
+            }
+          },
+          "description" : "更新修改动态的请求体"
+        }
+      },
+      "delete" : {
+        "security" : [ {
+          "bearerAuth" : [ ]
+        } ],
+        "tags" : [ "用户", "管理员" ],
+        "summary" : "删除动态",
+        "description" : "删除动态，限用户本人或管理员操作\n",
+        "parameters" : [ {
+          "in" : "query",
+          "name" : "id",
+          "description" : "动态id",
+          "required" : true,
+          "schema" : {
+            "type" : "integer"
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "动态已被删除"
+          },
+          "default" : {
+            "description" : "意外的错误",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/dynamic/dynamics" : {
+      "get" : {
+        "security" : [ {
+          "bearerAuth" : [ ]
+        } ],
+        "tags" : [ "用户" ],
+        "summary" : "返回动态列表",
+        "description" : "返回动态对象的集合\n",
+        "parameters" : [ {
+          "in" : "query",
+          "name" : "with_options",
+          "description" : "填充参数",
+          "required" : false,
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "type" : "object",
+                "properties" : {
+                  "with_resource" : {
+                    "type" : "boolean"
+                  },
+                  "with_approval" : {
+                    "type" : "boolean"
+                  },
+                  "with_comment" : {
+                    "type" : "boolean"
+                  }
+                },
+                "default" : {
+                  "with_options" : {
+                    "with_resource" : false,
+                    "with_approval" : false,
+                    "with_comment" : false
+                  }
+                }
+              }
+            }
+          }
+        }, {
+          "in" : "query",
+          "name" : "page",
+          "description" : "分页参数，总页码",
+          "required" : false,
+          "schema" : {
+            "type" : "integer"
+          }
+        }, {
+          "in" : "query",
+          "name" : "count_per_page",
+          "description" : "分页参数，每页数目",
+          "required" : false,
+          "schema" : {
+            "type" : "integer"
+          }
+        }, {
+          "in" : "query",
+          "name" : "filters",
+          "description" : "过滤参数",
+          "required" : false,
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "type" : "object"
+              }
+            }
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "返回动态对象列表",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "type" : "object",
+                  "required" : [ "dynamics", "page_info" ],
+                  "properties" : {
+                    "dynamics" : {
+                      "type" : "array",
+                      "items" : {
+                        "$ref" : "#/components/schemas/Dynamic"
+                      }
+                    },
+                    "page_info" : {
+                      "$ref" : "#/components/schemas/PageInfo"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "default" : {
+            "description" : "意外的错误",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/dynamic/nearby_dynamics" : {
+      "get" : {
+        "security" : [ {
+          "bearerAuth" : [ ]
+        } ],
+        "tags" : [ "用户" ],
+        "summary" : "返回动态列表",
+        "description" : "返回动态对象的集合\n",
+        "parameters" : [ {
+          "in" : "query",
+          "name" : "longitude",
+          "description" : "用户所在定位的经度",
+          "required" : true,
+          "schema" : {
+            "type" : "number",
+            "format" : "coordinate",
+            "example" : 120.29
+          }
+        }, {
+          "in" : "query",
+          "name" : "latitude",
+          "description" : "用户所在定位的纬度",
+          "required" : true,
+          "schema" : {
+            "type" : "number",
+            "format" : "coordinate",
+            "example" : 31.59
+          }
+        }, {
+          "in" : "query",
+          "name" : "with_options",
+          "description" : "填充参数",
+          "required" : false,
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "type" : "object",
+                "properties" : {
+                  "with_resource" : {
+                    "type" : "boolean"
+                  },
+                  "with_approval" : {
+                    "type" : "boolean"
+                  },
+                  "with_comment" : {
+                    "type" : "boolean"
+                  }
+                },
+                "default" : {
+                  "with_options" : {
+                    "with_resource" : false,
+                    "with_approval" : false,
+                    "with_comment" : false
+                  }
+                }
+              }
+            }
+          }
+        }, {
+          "in" : "query",
+          "name" : "page",
+          "description" : "分页参数，总页码",
+          "required" : false,
+          "schema" : {
+            "type" : "integer"
+          }
+        }, {
+          "in" : "query",
+          "name" : "count_per_page",
+          "description" : "分页参数，每页数目",
+          "required" : false,
+          "schema" : {
+            "type" : "integer"
+          }
+        }, {
+          "in" : "query",
+          "name" : "filters",
+          "description" : "过滤参数",
+          "required" : false,
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "type" : "object"
+              }
+            }
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "返回动态对象列表",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "type" : "object",
+                  "required" : [ "dynamics", "page_info" ],
+                  "properties" : {
+                    "dynamics" : {
+                      "type" : "array",
+                      "items" : {
+                        "$ref" : "#/components/schemas/Dynamic"
+                      }
+                    },
+                    "page_info" : {
+                      "$ref" : "#/components/schemas/PageInfo"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "default" : {
+            "description" : "意外的错误",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/dynamic/deleted_dynamics" : {
+      "get" : {
+        "security" : [ {
+          "bearerAuth" : [ ]
+        } ],
+        "tags" : [ "管理员" ],
+        "summary" : "返回已删除的动态列表",
+        "description" : "返回动态对象的集合\n",
+        "parameters" : [ {
+          "in" : "query",
+          "name" : "with_options",
+          "description" : "填充参数",
+          "required" : false,
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "type" : "object",
+                "properties" : {
+                  "with_resource" : {
+                    "type" : "boolean"
+                  },
+                  "with_approval" : {
+                    "type" : "boolean"
+                  },
+                  "with_comment" : {
+                    "type" : "boolean"
+                  }
+                },
+                "default" : {
+                  "with_options" : {
+                    "with_resource" : false,
+                    "with_approval" : false,
+                    "with_comment" : false
+                  }
+                }
+              }
+            }
+          }
+        }, {
+          "in" : "query",
+          "name" : "page",
+          "description" : "分页参数，总页码",
+          "required" : false,
+          "schema" : {
+            "type" : "integer"
+          }
+        }, {
+          "in" : "query",
+          "name" : "count_per_page",
+          "description" : "分页参数，每页数目",
+          "required" : false,
+          "schema" : {
+            "type" : "integer"
+          }
+        }, {
+          "in" : "query",
+          "name" : "filters",
+          "description" : "过滤参数",
+          "required" : false,
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "type" : "object"
+              }
+            }
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "返回动态对象列表",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "type" : "object",
+                  "required" : [ "dynamics", "page_info" ],
+                  "properties" : {
+                    "dynamics" : {
+                      "type" : "array",
+                      "items" : {
+                        "$ref" : "#/components/schemas/Dynamic"
+                      }
+                    },
+                    "page_info" : {
+                      "$ref" : "#/components/schemas/PageInfo"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "default" : {
+            "description" : "意外的错误",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/dynamic/approval" : {
+      "put" : {
+        "security" : [ {
+          "bearerAuth" : [ ]
+        } ],
+        "tags" : [ "用户" ],
+        "summary" : "用户对动态点赞",
+        "description" : "用户查阅动态后点赞\n",
+        "responses" : {
+          "200" : {
+            "description" : "点赞成功",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "type" : "object",
+                  "properties" : {
+                    "id" : {
+                      "type" : "integer",
+                      "description" : "点赞的id"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "default" : {
+            "description" : "意外的错误",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        },
+        "requestBody" : {
+          "content" : {
+            "application/x-www-form-urlencoded" : {
+              "schema" : {
+                "type" : "object",
+                "required" : [ "dynamic_id" ],
+                "properties" : {
+                  "dynamic_id" : {
+                    "type" : "integer"
+                  }
+                }
+              }
+            }
+          },
+          "description" : "用户对动态点赞的请求体"
+        }
+      },
+      "delete" : {
+        "security" : [ {
+          "bearerAuth" : [ ]
+        } ],
+        "tags" : [ "用户" ],
+        "summary" : "点赞取消",
+        "description" : "点赞取消，限用户本人操作\n",
+        "parameters" : [ {
+          "in" : "query",
+          "name" : "id",
+          "description" : "点赞id",
+          "required" : true,
+          "schema" : {
+            "type" : "integer"
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "点赞已被取消"
+          },
+          "default" : {
+            "description" : "意外的错误",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/dynamic/comment" : {
+      "put" : {
+        "security" : [ {
+          "bearerAuth" : [ ]
+        } ],
+        "tags" : [ "用户" ],
+        "summary" : "用户对动态评论",
+        "description" : "用户查阅动态后评论\n",
+        "responses" : {
+          "200" : {
+            "description" : "点赞成功",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "type" : "object",
+                  "properties" : {
+                    "id" : {
+                      "type" : "integer",
+                      "description" : "评论的id"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "default" : {
+            "description" : "意外的错误",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        },
+        "requestBody" : {
+          "content" : {
+            "application/x-www-form-urlencoded" : {
+              "schema" : {
+                "type" : "object",
+                "required" : [ "dynamic_id", "content" ],
+                "properties" : {
+                  "dynamic_id" : {
+                    "type" : "integer"
+                  },
+                  "content" : {
+                    "type" : "string"
+                  }
+                }
+              }
+            }
+          },
+          "description" : "用户对动态评论的请求体"
+        }
+      },
+      "delete" : {
+        "security" : [ {
+          "bearerAuth" : [ ]
+        } ],
+        "tags" : [ "用户" ],
+        "summary" : "删除评论",
+        "description" : "删除评论，限用户本人操作\n",
+        "parameters" : [ {
+          "in" : "query",
+          "name" : "id",
+          "description" : "评论id",
+          "required" : true,
+          "schema" : {
+            "type" : "integer"
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "评论已被删除"
+          },
+          "default" : {
+            "description" : "意外的错误",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/dynamic/comments" : {
+      "get" : {
+        "security" : [ {
+          "bearerAuth" : [ ]
+        } ],
+        "tags" : [ "用户" ],
+        "summary" : "返回对应动态的评论列表",
+        "description" : "返回评论对象的集合\n",
+        "parameters" : [ {
+          "in" : "query",
+          "name" : "dynamic_id",
+          "description" : "动态id",
+          "required" : true,
+          "schema" : {
+            "type" : "integer"
+          }
+        }, {
+          "in" : "query",
+          "name" : "page",
+          "description" : "分页参数，总页码",
+          "required" : false,
+          "schema" : {
+            "type" : "integer"
+          }
+        }, {
+          "in" : "query",
+          "name" : "count_per_page",
+          "description" : "分页参数，每页数目",
+          "required" : false,
+          "schema" : {
+            "type" : "integer"
+          }
+        }, {
+          "in" : "query",
+          "name" : "filters",
+          "description" : "过滤参数",
+          "required" : false,
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "type" : "object"
+              }
+            }
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "返回评论对象列表",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "type" : "object",
+                  "required" : [ "comments", "page_info" ],
+                  "properties" : {
+                    "comments" : {
+                      "type" : "array",
+                      "items" : {
+                        "$ref" : "#/components/schemas/Comment"
+                      }
+                    },
+                    "page_info" : {
+                      "$ref" : "#/components/schemas/PageInfo"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "default" : {
+            "description" : "意外的错误",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/topic/topic" : {
+      "get" : {
+        "security" : [ {
+          "bearerAuth" : [ ]
+        } ],
+        "tags" : [ "用户" ],
+        "summary" : "返回封装好的话题对象",
+        "description" : "根据话题id获取话题\n",
+        "parameters" : [ {
+          "in" : "query",
+          "name" : "id",
+          "description" : "话题id",
+          "required" : true,
+          "schema" : {
+            "type" : "integer"
+          }
+        }, {
+          "in" : "query",
+          "name" : "with_options",
+          "description" : "填充参数",
+          "required" : false,
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "type" : "object",
+                "properties" : {
+                  "with_activity" : {
+                    "type" : "boolean"
+                  },
+                  "with_dynamic" : {
+                    "type" : "boolean"
+                  }
+                },
+                "default" : {
+                  "with_options" : {
+                    "with_activity" : false,
+                    "with_dynamic" : false
+                  }
+                }
+              }
+            }
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "search results matching criteria",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Topic"
+                }
+              }
+            }
+          },
+          "default" : {
+            "description" : "意外的错误",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        }
+      },
+      "put" : {
+        "security" : [ {
+          "bearerAuth" : [ ]
+        } ],
+        "tags" : [ "管理员" ],
+        "summary" : "管理员创建话题",
+        "description" : "创建话题，限管理员权限操作\n",
+        "responses" : {
+          "200" : {
+            "description" : "创建成功",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "type" : "object",
+                  "properties" : {
+                    "id" : {
+                      "type" : "integer",
+                      "description" : "话题的id"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "default" : {
+            "description" : "意外的错误",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        },
+        "requestBody" : {
+          "content" : {
+            "application/x-www-form-urlencoded" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/CreatedTopic"
+              }
+            }
+          },
+          "description" : "管理员创建话题的请求体"
+        }
+      },
+      "post" : {
+        "security" : [ {
+          "bearerAuth" : [ ]
+        } ],
+        "tags" : [ "管理员" ],
+        "summary" : "管理员更新话题",
+        "description" : "更新话题，限管理员权限操作\n",
+        "responses" : {
+          "200" : {
+            "description" : "更新成功"
+          },
+          "default" : {
+            "description" : "意外的错误",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        },
+        "requestBody" : {
+          "content" : {
+            "application/x-www-form-urlencoded" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/UpdatedTopic"
+              }
+            }
+          },
+          "description" : "管理员更新话题的请求体"
+        }
+      }
+    },
+    "/topic/topics" : {
+      "get" : {
+        "security" : [ {
+          "bearerAuth" : [ ]
+        } ],
+        "tags" : [ "用户" ],
+        "summary" : "返回话题列表",
+        "description" : "返回话题对象的集合\n",
+        "parameters" : [ {
+          "in" : "query",
+          "name" : "with_options",
+          "description" : "填充参数",
+          "required" : false,
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "type" : "object",
+                "properties" : {
+                  "with_activity" : {
+                    "type" : "boolean"
+                  },
+                  "with_dynamic" : {
+                    "type" : "boolean"
+                  }
+                },
+                "default" : {
+                  "with_options" : {
+                    "with_activity" : false,
+                    "with_dynamic" : false
+                  }
+                }
+              }
+            }
+          }
+        }, {
+          "in" : "query",
+          "name" : "page",
+          "description" : "分页参数，总页码",
+          "required" : false,
+          "schema" : {
+            "type" : "integer"
+          }
+        }, {
+          "in" : "query",
+          "name" : "count_per_page",
+          "description" : "分页参数，每页数目",
+          "required" : false,
+          "schema" : {
+            "type" : "integer"
+          }
+        }, {
+          "in" : "query",
+          "name" : "filters",
+          "description" : "过滤参数",
+          "required" : false,
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "type" : "object"
+              }
+            }
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "返回话题对象列表",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "type" : "object",
+                  "required" : [ "topics", "page_info" ],
+                  "properties" : {
+                    "dynamics" : {
+                      "type" : "array",
+                      "items" : {
+                        "$ref" : "#/components/schemas/Topic"
+                      }
+                    },
+                    "page_info" : {
+                      "$ref" : "#/components/schemas/PageInfo"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "default" : {
+            "description" : "意外的错误",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/topic/banned_topic" : {
+      "put" : {
+        "security" : [ {
+          "bearerAuth" : [ ]
+        } ],
+        "tags" : [ "管理员" ],
+        "summary" : "禁用话题",
+        "description" : "禁用话题，限管理员操作\n",
+        "responses" : {
+          "200" : {
+            "description" : "禁用成功"
+          },
+          "default" : {
+            "description" : "意外的错误",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        },
+        "requestBody" : {
+          "content" : {
+            "application/x-www-form-urlencoded" : {
+              "schema" : {
+                "type" : "object",
+                "required" : [ "topic_id" ],
+                "properties" : {
+                  "circle_id" : {
+                    "type" : "integer"
+                  }
+                }
+              }
+            }
+          },
+          "description" : "禁用话题的请求体"
+        }
+      },
+      "delete" : {
+        "security" : [ {
+          "bearerAuth" : [ ]
+        } ],
+        "tags" : [ "管理员" ],
+        "summary" : "解禁话题",
+        "description" : "解禁话题，限管理员操作\n",
+        "parameters" : [ {
+          "in" : "query",
+          "name" : "topic_id",
+          "description" : "话题id",
+          "required" : true,
+          "schema" : {
+            "type" : "integer"
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "话题已被解除禁用"
+          },
+          "default" : {
+            "description" : "意外的错误",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/topic/banned_topics" : {
+      "get" : {
+        "security" : [ {
+          "bearerAuth" : [ ]
+        } ],
+        "tags" : [ "管理员" ],
+        "summary" : "返回话题列表",
+        "description" : "返回话题对象的集合\n",
+        "parameters" : [ {
+          "in" : "query",
+          "name" : "with_options",
+          "description" : "填充参数",
+          "required" : false,
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "type" : "object",
+                "properties" : {
+                  "with_activity" : {
+                    "type" : "boolean"
+                  },
+                  "with_dynamic" : {
+                    "type" : "boolean"
+                  }
+                },
+                "default" : {
+                  "with_options" : {
+                    "with_activity" : false,
+                    "with_dynamic" : false
+                  }
+                }
+              }
+            }
+          }
+        }, {
+          "in" : "query",
+          "name" : "page",
+          "description" : "分页参数，总页码",
+          "required" : false,
+          "schema" : {
+            "type" : "integer"
+          }
+        }, {
+          "in" : "query",
+          "name" : "count_per_page",
+          "description" : "分页参数，每页数目",
+          "required" : false,
+          "schema" : {
+            "type" : "integer"
+          }
+        }, {
+          "in" : "query",
+          "name" : "filters",
+          "description" : "过滤参数",
+          "required" : false,
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "type" : "object"
+              }
+            }
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "返回话题对象列表",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "type" : "object",
+                  "required" : [ "topics", "page_info" ],
+                  "properties" : {
+                    "dynamics" : {
+                      "type" : "array",
+                      "items" : {
+                        "$ref" : "#/components/schemas/Topic"
+                      }
+                    },
+                    "page_info" : {
+                      "$ref" : "#/components/schemas/PageInfo"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "default" : {
+            "description" : "意外的错误",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/topic/active_topics" : {
+      "get" : {
+        "security" : [ {
+          "bearerAuth" : [ ]
+        } ],
+        "tags" : [ "用户" ],
+        "summary" : "返回热门话题列表",
+        "description" : "返回热门话题对象的集合\n",
+        "parameters" : [ {
+          "in" : "query",
+          "name" : "with_options",
+          "description" : "填充参数",
+          "required" : false,
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "type" : "object",
+                "properties" : {
+                  "with_activity" : {
+                    "type" : "boolean"
+                  },
+                  "with_dynamic" : {
+                    "type" : "boolean"
+                  }
+                },
+                "default" : {
+                  "with_options" : {
+                    "with_activity" : false,
+                    "with_dynamic" : false
+                  }
+                }
+              }
+            }
+          }
+        }, {
+          "in" : "query",
+          "name" : "page",
+          "description" : "分页参数，总页码",
+          "required" : false,
+          "schema" : {
+            "type" : "integer"
+          }
+        }, {
+          "in" : "query",
+          "name" : "count_per_page",
+          "description" : "分页参数，每页数目",
+          "required" : false,
+          "schema" : {
+            "type" : "integer"
+          }
+        }, {
+          "in" : "query",
+          "name" : "filters",
+          "description" : "过滤参数",
+          "required" : false,
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "type" : "object"
+              }
+            }
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "返回话题对象列表",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "type" : "object",
+                  "required" : [ "topics", "page_info" ],
+                  "properties" : {
+                    "dynamics" : {
+                      "type" : "array",
+                      "items" : {
+                        "$ref" : "#/components/schemas/Topic"
+                      }
+                    },
+                    "page_info" : {
+                      "$ref" : "#/components/schemas/PageInfo"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "default" : {
+            "description" : "意外的错误",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components" : {
+    "securitySchemes" : {
+      "bearerAuth" : {
+        "type" : "http",
+        "scheme" : "bearer",
+        "bearerFormat" : "JWT"
+      }
+    },
+    "responses" : {
+      "NotFound" : {
+        "description" : "找不到指定的资源",
+        "content" : {
+          "application/json" : {
+            "schema" : {
+              "$ref" : "#/components/schemas/Error"
+            }
+          }
+        }
+      },
+      "Unauthorized" : {
+        "description" : "访问令牌丢失或无效",
+        "content" : {
+          "application/json" : {
+            "schema" : {
+              "$ref" : "#/components/schemas/Error"
+            }
+          }
+        }
+      }
+    },
+    "schemas" : {
+      "Error" : {
+        "type" : "object",
+        "properties" : {
+          "code" : {
+            "type" : "string",
+            "description" : "错误代码"
+          },
+          "message" : {
+            "type" : "string",
+            "description" : "错误内容"
+          }
+        },
+        "required" : [ "code", "message" ]
+      },
+      "PageInfo" : {
+        "type" : "object",
+        "properties" : {
+          "cur_page" : {
+            "type" : "integer",
+            "description" : "当前页"
+          },
+          "count_per_page" : {
+            "type" : "integer",
+            "description" : "每页数目"
+          },
+          "total_object_count" : {
+            "type" : "integer",
+            "description" : "总对象数目"
+          },
+          "display_pages" : {
+            "type" : "integer",
+            "description" : "呈现页数"
+          },
+          "has_head" : {
+            "type" : "boolean",
+            "description" : "是否拥有头部页"
+          },
+          "has_tail" : {
+            "type" : "boolean",
+            "description" : "是否拥有尾部页"
+          },
+          "has_prev" : {
+            "type" : "boolean",
+            "description" : "是否拥有前一页"
+          },
+          "has_next" : {
+            "type" : "boolean",
+            "description" : "是否拥有后一页"
+          },
+          "prev" : {
+            "type" : "integer",
+            "description" : "前页"
+          },
+          "next" : {
+            "type" : "integer",
+            "description" : "后页"
+          },
+          "max_page" : {
+            "type" : "integer",
+            "description" : "最大页码"
+          }
+        }
+      },
+      "Dynamic" : {
+        "type" : "object",
+        "required" : [ "id", "content", "user_id", "topic_id", "longitude", "latitude", "resources", "comments", "approval", "approval_amount", "comment_amount" ],
+        "properties" : {
+          "id" : {
+            "type" : "integer"
+          },
+          "user_id" : {
+            "type" : "integer"
+          },
+          "topic_id" : {
+            "type" : "integer"
+          },
+          "content" : {
+            "type" : "string"
+          },
+          "longitude" : {
+            "type" : "number",
+            "format" : "coordinate",
+            "example" : 120.29
+          },
+          "latitude" : {
+            "type" : "number",
+            "format" : "coordinate",
+            "example" : 31.59
+          },
+          "approval_amount" : {
+            "type" : "integer"
+          },
+          "comment_amount" : {
+            "type" : "integer"
+          },
+          "resources" : {
+            "type" : "array",
+            "items" : {
+              "$ref" : "#/components/schemas/Resource"
+            }
+          },
+          "comments" : {
+            "type" : "array",
+            "items" : {
+              "$ref" : "#/components/schemas/Comment"
+            }
+          },
+          "approvals" : {
+            "type" : "array",
+            "items" : {
+              "$ref" : "#/components/schemas/Approval"
+            }
+          }
+        }
+      },
+      "CreatedDynamic" : {
+        "type" : "object",
+        "required" : [ "content", "topic_id", "longitude", "latitude" ],
+        "properties" : {
+          "content" : {
+            "type" : "string"
+          },
+          "topic_id" : {
+            "type" : "integer"
+          },
+          "longitude" : {
+            "type" : "number",
+            "format" : "coordinate",
+            "example" : 120.29
+          },
+          "latitude" : {
+            "type" : "number",
+            "format" : "coordinate",
+            "example" : 31.59
+          },
+          "resources" : {
+            "type" : "array",
+            "items" : {
+              "$ref" : "#/components/schemas/Resource"
+            }
+          }
+        }
+      },
+      "UpdatedDynamic" : {
+        "type" : "object",
+        "required" : [ "id" ],
+        "properties" : {
+          "id" : {
+            "type" : "integer"
+          },
+          "content" : {
+            "type" : "string"
+          },
+          "topic_id" : {
+            "type" : "integer"
+          },
+          "longitude" : {
+            "type" : "number",
+            "format" : "coordinate",
+            "example" : 120.29
+          },
+          "latitude" : {
+            "type" : "number",
+            "format" : "coordinate",
+            "example" : 31.59
+          },
+          "resources" : {
+            "type" : "array",
+            "items" : {
+              "$ref" : "#/components/schemas/Resource"
+            }
+          }
+        }
+      },
+      "Resource" : {
+        "type" : "object",
+        "required" : [ "id", "url", "size", "type" ],
+        "properties" : {
+          "id" : {
+            "type" : "integer"
+          },
+          "url" : {
+            "type" : "string",
+            "format" : "url",
+            "example" : "https://www.mindinn.top/videos/example.mp4"
+          },
+          "size" : {
+            "type" : "string",
+            "format" : "storage",
+            "example" : "10kb"
+          },
+          "type" : {
+            "type" : "string",
+            "formal" : "media",
+            "example" : "video"
+          }
+        }
+      },
+      "Comment" : {
+        "type" : "object",
+        "required" : [ "id", "content", "user_id", "dynamic_id" ],
+        "properties" : {
+          "id" : {
+            "type" : "integer"
+          },
+          "content" : {
+            "type" : "string"
+          },
+          "user_id" : {
+            "type" : "integer"
+          },
+          "dynamic_id" : {
+            "type" : "integer"
+          }
+        }
+      },
+      "Approval" : {
+        "type" : "object",
+        "required" : [ "id" ],
+        "properties" : {
+          "id" : {
+            "type" : "integer"
+          }
+        }
+      },
+      "Topic" : {
+        "type" : "object",
+        "required" : [ "id", "name", "avatar", "description", "activity_amount", "dynamic_amount", "activities", "dynamics" ],
+        "properties" : {
+          "id" : {
+            "type" : "integer"
+          },
+          "name" : {
+            "type" : "string"
+          },
+          "avatar" : {
+            "type" : "string",
+            "format" : "url",
+            "example" : "https://www.mindinn.top/images/default-avatar"
+          },
+          "description" : {
+            "type" : "string"
+          },
+          "activity_amount" : {
+            "type" : "integer"
+          },
+          "dynamic_amount" : {
+            "type" : "integer"
+          },
+          "approval_amount" : {
+            "type" : "integer"
+          },
+          "comment_amount" : {
+            "type" : "integer"
+          },
+          "activities" : {
+            "type" : "array",
+            "items" : {
+              "$ref" : "#/components/schemas/Activity"
+            }
+          },
+          "dynamics" : {
+            "type" : "array",
+            "items" : {
+              "$ref" : "#/components/schemas/Dynamic"
+            }
+          }
+        }
+      },
+      "CreatedTopic" : {
+        "type" : "object",
+        "required" : [ "name", "avatar", "description" ],
+        "properties" : {
+          "name" : {
+            "type" : "string"
+          },
+          "avatar" : {
+            "type" : "string",
+            "format" : "url",
+            "example" : "https://www.mindinn.top/images/default-avatar"
+          },
+          "description" : {
+            "type" : "string"
+          }
+        }
+      },
+      "UpdatedTopic" : {
+        "type" : "object",
+        "required" : [ "id", "name", "avatar", "description" ],
+        "properties" : {
+          "id" : {
+            "type" : "integer"
+          },
+          "name" : {
+            "type" : "string"
+          },
+          "avatar" : {
+            "type" : "string",
+            "format" : "url",
+            "example" : "https://www.mindinn.top/images/default-avatar"
+          },
+          "description" : {
+            "type" : "string"
+          }
+        }
+      },
+      "Activity" : {
+        "type" : "object",
+        "required" : [ "id" ],
+        "properties" : {
+          "id" : {
+            "type" : "integer"
+          }
+        }
+      }
+    }
+  }
+}
