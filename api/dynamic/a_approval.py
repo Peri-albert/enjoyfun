@@ -26,7 +26,7 @@ class AApproval(ApiResource):
 		approval = LikeService(user).like(param_object)
 
 		return {
-			id: approval.id
+			'id': approval.id
 		}
 
 	@param_required(['user', 'id'])

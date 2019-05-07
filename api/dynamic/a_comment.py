@@ -27,7 +27,7 @@ class AComment(ApiResource):
 		comment = CommentService(user).comment(param_object)
 
 		return {
-			comment.id
+			'id': comment.id
 		}
 
 	@param_required(['user', 'id'])
